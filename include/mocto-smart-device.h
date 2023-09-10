@@ -4,6 +4,7 @@
 #include "msd_serial.h"
 #include "msd_nvs.h"
 #include "msd_wifi.h"
+#include "msd_blinker.h"
 
 void msd_configure();
 

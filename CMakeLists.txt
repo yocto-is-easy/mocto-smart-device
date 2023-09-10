@@ -3,7 +3,8 @@ idf_component_register(SRCS
     "msd_wifi.c"
     "msd_nvs.c"
     "msd_serial.c"
+    "msd_blinker.c"
 
     INCLUDE_DIRS "include"
-    REQUIRES esp_wifi nvs_flash
+    REQUIRES esp_wifi nvs_flash driver
 )
