@@ -8,6 +8,8 @@
 #define MSD_ERROR_WIFI_INIT_MSG "MSD_ERROR_WIFI_INIT"
 
 #define DELAY_FOR_WIFI_CREDENTIALS_MS 200
+#define DELAY_FOR_HOST_TO_READ_RESPONSE_MS 100
+#define DELAY_FOR_HOST_TO_READ_READY_MS 100
 
 void msd_configure() {
     msd_nvs_init(false);
@@ -18,6 +20,8 @@ void msd_configure() {
     bool loaded_from_nvs = false;
 
     int err = 0;
+
+    vTaskDelay(DELAY_FOR_HOST_TO_READ_READY_MS / portTICK_PERIOD_MS);
     printf(MSD_READY_MSG"\n");
 
     // wait for head unit write to serial
@@ -61,6 +65,8 @@ void msd_configure() {
             return;
         }   
     }
+
+    vTaskDelay(DELAY_FOR_HOST_TO_READ_RESPONSE_MS / portTICK_PERIOD_MS);
 
     printf(MSD_CONFIGURED_MSG"\n");
 
