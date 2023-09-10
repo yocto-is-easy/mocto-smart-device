@@ -38,9 +38,8 @@ int msd_wifi_init_connection(msd_wifi_config_t *msd_wifi_config) {
         ESP_LOGE("msd_wifi_init_connection", "esp_event_loop_create_default failed: %s", esp_err_to_name(err));
         return err;
     }
-    
-    // TODO: research why does works even with error return
-    esp_netif_create_default_wifi_sta();
+
+    esp_netif_t* default_sta = esp_netif_create_default_wifi_sta();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     err = esp_wifi_init(&cfg);
@@ -66,7 +65,13 @@ int msd_wifi_init_connection(msd_wifi_config_t *msd_wifi_config) {
     memcpy(wifi_config.sta.ssid, msd_wifi_config->ssid, sizeof(wifi_config.sta.ssid));
     memcpy(wifi_config.sta.password, msd_wifi_config->password, sizeof(wifi_config.sta.password));
 
-    err = esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config);
+    err = esp_wifi_set_mode(WIFI_MODE_STA);
+    if(err != ESP_OK) {
+        ESP_LOGE("msd_wifi_init_connection", "esp_wifi_set_mode failed: %s", esp_err_to_name(err));
+        return err;
+    }
+
+    err = esp_wifi_set_config(WIFI_IF_STA, &wifi_config);
     if(err != ESP_OK) {
         ESP_LOGE("msd_wifi_init_connection", "esp_wifi_set_config failed: %s", esp_err_to_name(err));
         return err;
